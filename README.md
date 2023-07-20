@@ -15,6 +15,6 @@ Instructions:
 Features (v.1):
 1. CPU usage
 2. MEM usage
-3. DISK SPACE used
+3. DISK usage
 4. Local IPv4 Address
-5. Default IPv4 Address
+5. System up time
