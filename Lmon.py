@@ -1,39 +1,69 @@
-import os
 import psutil
 import socket
+import sys
 import time
-
+import datetime
 
 def get_cpu_usage():
     return psutil.cpu_percent(interval=1)
 
 def get_memory_usage():
-    return psutil.virtual_memory().percent
+    memory = psutil.virtual_memory()
+    return memory.percent
 
-def get_disk_space():
-    return psutil.disk_usage('/').percent
+def get_disk_usage():
+    disk = psutil.disk_usage('/')
+    return disk.percent
 
 def get_ipv4_address():
-    return socket.gethostbyname(socket.gethostname())
+    try:
+        # Get the default network interface's IPv4 address
+        return socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        return "N/A"
 
-def get_router_ipv4_address():
-    return socket.gethostbyname(socket.getfqdn())
+def get_system_uptime():
+    boot_time_timestamp = psutil.boot_time()
+    now_timestamp = time.time()
+    uptime_seconds = now_timestamp - boot_time_timestamp
+    return str(datetime.timedelta(seconds=uptime_seconds))
 
+def clear_console():
+    if sys.platform.startswith('linux'):
+        # Linux
+        sys.stdout.write('\033[2J\033[H')
+    elif sys.platform in ['win32', 'cygwin']:
+        # Windows
+        import os
+        os.system('cls')
+    elif sys.platform in ['darwin']:
+        # macOS
+        os.system('clear')
 
-while True:
-    cpu_usage = get_cpu_usage()
-    memory_usage = get_memory_usage()
-    disk_space = get_disk_space()
-    ipv4_address = get_ipv4_address()
-    router_ipv4_address = get_router_ipv4_address()
+def main():
+    print("Real-time System Usage Monitor (Press Ctrl+C to exit)")
 
-    os.system('cls' if os.name == 'nt' else 'clear')  # Clear the console screen
+    try:
+        while True:
+            cpu_usage = get_cpu_usage()
+            memory_usage = get_memory_usage()
+            disk_usage = get_disk_usage()
+            ipv4_address = get_ipv4_address()
+            system_uptime = get_system_uptime()
 
-    print(f"CPU Usage: {cpu_usage}%")
-    print(f"Memory Usage: {memory_usage}%")
-    print(f"Disk Space: {disk_space}%")
-    print(f"IPv4 Address: {ipv4_address}")
-    print(f"Router IPv4 Address: {router_ipv4_address}")
-    print("-------------------------")
+            clear_console()
 
-    time.sleep(1)
+            print(f"CPU Usage: {cpu_usage:.1f}%")
+            print(f"Memory Usage: {memory_usage:.1f}%")
+            print(f"Disk Usage: {disk_usage:.1f}%")
+            print(f"IPv4 Address: {ipv4_address}")
+            print(f"Uptime: {system_uptime}")
+
+            sys.stdout.flush()
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("\nMonitoring stopped.")
+
+if __name__ == "__main__":
+    main()
