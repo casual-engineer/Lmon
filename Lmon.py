@@ -28,6 +28,13 @@ def get_system_uptime():
     uptime_seconds = now_timestamp - boot_time_timestamp
     return str(datetime.timedelta(seconds=uptime_seconds))
 
+def get_hostname():
+    return socket.gethostname()
+
+def get_battery_percentage():
+    battery = psutil.sensors_battery()
+    return battery.percent if battery else "N/A"
+
 def clear_console():
     if sys.platform.startswith('linux'):
         # Linux
@@ -50,13 +57,17 @@ def main():
             disk_usage = get_disk_usage()
             ipv4_address = get_ipv4_address()
             system_uptime = get_system_uptime()
+            hostname = get_hostname()
+            battery_percentage = get_battery_percentage()
 
             clear_console()
 
+            print(f"Hostname: {hostname}")
             print(f"CPU Usage: {cpu_usage:.1f}%")
             print(f"Memory Usage: {memory_usage:.1f}%")
             print(f"Disk Usage: {disk_usage:.1f}%")
             print(f"IPv4 Address: {ipv4_address}")
+            print(f"Battery Percentage: {battery_percentage}%")
             print(f"Uptime: {system_uptime}")
 
             sys.stdout.flush()
