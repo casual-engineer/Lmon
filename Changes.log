@@ -1,8 +1,17 @@
-release date: 7-20-2023
-version: 2.0
+[release date: 7-20-2023]
+[version: 2.0]
 
 updates:
 1. added real-time system up time data
 
 removals:
 1. incorrect IPv4 default gateway data
+
+[release date: 7-23-2023]
+[version: 3.0]
+
+updates:
+1. added hostname display information
+2. added current battery percentage display information
+
+
