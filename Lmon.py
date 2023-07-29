@@ -47,6 +47,22 @@ def clear_console():
         # macOS
         os.system('clear')
 
+def get_top_cpu_processes():
+    processes = []
+    for process in psutil.process_iter(['pid', 'name', 'cpu_percent']):
+        if process.info['cpu_percent'] > 0.0:
+            processes.append(process.info)
+    processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
+    return processes[:3]
+
+def get_top_memory_processes():
+    processes = []
+    for process in psutil.process_iter(['pid', 'name', 'memory_percent']):
+        if process.info['memory_percent'] > 0.0:
+            processes.append(process.info)
+    processes.sort(key=lambda x: x['memory_percent'], reverse=True)
+    return processes[:3]
+
 def main():
     print("Real-time System Usage Monitor (Press Ctrl+C to exit)")
 
@@ -59,6 +75,8 @@ def main():
             system_uptime = get_system_uptime()
             hostname = get_hostname()
             battery_percentage = get_battery_percentage()
+            top_cpu_processes = get_top_cpu_processes()
+            top_memory_processes = get_top_memory_processes()
 
             clear_console()
 
@@ -69,6 +87,14 @@ def main():
             print(f"IPv4 Address: {ipv4_address}")
             print(f"Battery Percentage: {battery_percentage}%")
             print(f"Uptime: {system_uptime}")
+
+            print("\nTop 3 Processes by CPU Usage:")
+            for process in top_cpu_processes:
+                print(f"PID: {process['pid']} - Name: {process['name']} - CPU Usage: {process['cpu_percent']:.1f}%")
+
+            print("\nTop 3 Processes by Memory Usage:")
+            for process in top_memory_processes:
+                print(f"PID: {process['pid']} - Name: {process['name']} - Memory Usage: {process['memory_percent']:.1f}%")
 
             sys.stdout.flush()
             time.sleep(1)
