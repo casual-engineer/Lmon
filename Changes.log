@@ -14,4 +14,11 @@ updates:
 1. added hostname display information
 2. added current battery percentage display information
 
+[rekease date: 7-29-2023]
+[version: 4.0]
+
+updates:
+1. added top 3 processes by cpu usage monitor
+2. added top 3 processes by mem usage monitor
+
 
