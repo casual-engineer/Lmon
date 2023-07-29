@@ -4,7 +4,7 @@
 updates:
 1. added real-time system up time data
 
-removals:
+removal(s):
 1. incorrect IPv4 default gateway data
 
 [release date: 7-23-2023]
